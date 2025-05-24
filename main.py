@@ -4,12 +4,12 @@ import board
 
 pg.init()
 pg.display.init()
-display = pg.display.set_mode(size=(640,480))
+display = pg.display.set_mode(size=(con.WIDTH,con.HEIGTH))
 
 
 while True:
-    cell = board.Cell(display,0,0)
-    cell.drawCell()
+    screen = board.Board(display)
+    screen.drawBoard()
     pg.display.update()
     
     for event in pg.event.get():
