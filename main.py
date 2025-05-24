@@ -17,23 +17,23 @@ while True:
             exit()
 
         elif event.type == pg.MOUSEBUTTONDOWN:
-            if event.button == 1:  # Clic izquierdo
+            if event.button == 1:  
                 cell = screen.startDrag(event.pos)
                 if cell:
                     dragging = True
 
         elif event.type == pg.MOUSEBUTTONUP:
-            if event.button == 1 and dragging:  # Soltar clic izquierdo
-                screen.stopDrag(event.pos)
+            if event.button == 1 and dragging:  
+                screen.stopDrag(event.pos, cell.principal)
                 dragging = False
 
         elif event.type == pg.MOUSEMOTION:
             if dragging:
                 screen.updateDrag(event.pos)
 
-    # CLAVE: Renderizar TODO en cada frame
+
     screen.render()
     
-    # UNA SOLA actualización de pantalla al final
+
     pg.display.flip()
     clock.tick(60)

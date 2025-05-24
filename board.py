@@ -10,14 +10,14 @@ class Cell:
         self.__width = con.WIDTH / con.ROWS
         self.__heigth = con.HEIGTH / con.COLUMNS
         self.occupied = False
-        self.__principal = principality
+        self.principal = principality
         self.rect = None
         self.piece = None
 
     def drawCell(self) -> None:
         self.rect = pg.Rect(self.xpos, self.ypos, self.__width, self.__heigth) 
         pg.draw.rect(self.__display,
-                     con.COLORS[(self.__principal+1)%2],
+                     con.COLORS[(self.principal+1)%2],
                      self.rect) 
 
 class Board:
@@ -40,7 +40,7 @@ class Board:
                                curXPos,
                                curYPos,
                                principality=(row+col)%2)
-                vec.append(curCell)
+                vec.append(curCell)]
             self.__board.append(vec)
 
     def setupPieces(self):
@@ -83,7 +83,32 @@ class Board:
         if self.dragged_piece:
             self.dragged_piece.updateDrag(mouse_pos)
 
-    def stopDrag(self, mouse_pos):
+    def stopDrag(self, mouse_pos, principal):
         if self.dragged_piece:
-            self.dragged_piece.stopDrag()
+            self.dragged_piece.stopDrag(mouse_pos)
+            self.movePiece(*mouse_pos, principal)
             self.dragged_piece = None
+
+    def movePiece(self, new_row, new_col, principal):
+        prev_row = self.dragged_piece.xpos 
+        prev_col = self.dragged_piece.ypos 
+        
+        self.dragged_piece.xpos = (new_row // 100) * 100
+        self.dragged_piece.ypos = (new_col // 100) * 100
+
+        self.__board[int(new_row//100)][int(new_col//100)].occupied = True
+        self.__board[int(new_row//100)][int(new_col//100)].piece = pieces.Piece("pawn",
+                                                                                True,
+                                                                                self.__display,
+                                                                                self.dragged_piece.xpos,
+                                                                                self.dragged_piece.ypos)
+        
+        self.__board[int(prev_row// 100)][int(prev_col// 100)] = Cell(self.__display, 
+                                                                      prev_row*100,
+                                                                      prev_col*100,
+                                                                      principality=principal)
+        
+        
+        self.dragged_piece.dragged = False
+        self.dragged_piece.drawPiece()
+        
