@@ -9,3 +9,6 @@ COLUMNS = 8
 
 # Color constants
 COLORS = ["#769656", "#eeeed2"]
+
+# Filepath constants
+IMAGES = "images/"
